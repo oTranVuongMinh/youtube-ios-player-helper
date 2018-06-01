@@ -37,10 +37,17 @@
     </div>
     <script src="https://www.youtube.com/iframe_api" onerror="window.location.href='ytplayer://onYouTubeIframeAPIFailedToLoad'"></script>
     <script>
-    var player;
-    var error = false;
+    // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
 
-    YT.ready(function() {
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+
+      function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', %@);
         player.setSize(window.innerWidth, window.innerHeight);
         window.location.href = 'ytplayer://onYouTubeIframeAPIReady';
@@ -53,9 +60,9 @@
                  window.location.href = 'ytplayer://onPlayTime?data=' + time;
              }
         }
-        
+
         window.setInterval(getCurrentTime, 500);
-             
+
     });
 
     function onReady(event) {
@@ -63,7 +70,7 @@
     }
 
     function onStateChange(event) {
-        if (!error) {            
+        if (!error) {
             window.location.href = 'ytplayer://onStateChange?data=' + event.data;
         }
         else {
@@ -81,7 +88,7 @@
         }
         window.location.href = 'ytplayer://onError?data=' + event.data;
     }
-    
+
     window.onresize = function() {
         player.setSize(window.innerWidth, window.innerHeight);
     }
